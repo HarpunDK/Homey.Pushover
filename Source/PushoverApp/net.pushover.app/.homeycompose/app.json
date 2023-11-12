@@ -1,0 +1,29 @@
+{
+  "id": "net.pushover.app",
+  "version": "1.0.0",
+  "compatibility": ">=5.0.0",
+  "sdk": 3,
+  "platforms": [
+    "local"
+  ],
+  "name": {
+    "en": "Pushover"
+  },
+  "description": {
+    "en": "Pushover support"
+  },
+  "category": [
+    "tools"
+  ],
+  "permissions": [],
+  "images": {
+    "small": "/assets/images/small.png",
+    "large": "/assets/images/large.png",
+    "xlarge": "/assets/images/xlarge.png"
+  },
+  "author": {
+    "name": "Kim Kokholm",
+    "email": "kokholm@gmail.com"
+  },
+  "brandColor": "#37a5f2"
+}
