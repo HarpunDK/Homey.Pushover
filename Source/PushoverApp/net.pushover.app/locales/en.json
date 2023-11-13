@@ -1,1 +1,6 @@
-{}
+{
+    "settings": {
+      "title": "Pushover.net notification settings",
+      "subtitle": "Please provide information for api-usage."
+    }
+  }

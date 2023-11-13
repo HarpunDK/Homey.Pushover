@@ -25,5 +25,10 @@
     "name": "Kim Kokholm",
     "email": "kokholm@gmail.com"
   },
-  "brandColor": "#37a5f2"
+  "brandColor": "#37a5f2",
+  "source": "https://github.com/HarpunDK/Homey.Pushover",
+  "support": "https://github.com/HarpunDK/Homey.Pushover",
+  "bugs": {
+    "url": "https://github.com/HarpunDK/Homey.Pushover"
+  }
 }

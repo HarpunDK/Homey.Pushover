@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- The '/homey.js' script must be included in your settings view to work -->
+    <script type="text/javascript" src="/homey.js" data-origin="settings"></script>
+</head>
+
+<body>
+    <header class="homey-header">
+        <h1 class="homey-title" data-i18n="settings.title">
+            <!-- This will be filled with the translated string with key 'settings.title'. -->
+        </h1>
+        <p class="homey-subtitle" data-i18n="settings.subtitle">
+            <!-- This field will also be translated -->
+        </p>
+    </header>
+
+    <fieldset class="homey-form-fieldset">
+        <legend class="homey-form-legend">Pushover.net Settings</legend>
+
+        <div class="homey-form-group">
+            <label class="homey-form-label" for="inputTokenValue">App token</label>
+            <input class="homey-form-input" id="inputTokenValue" type="text" value="" placeholder="Insert App here" />
+            <small class="text-muted">Create App at Pushover.net</small>
+        </div>
+
+        <div class="homey-form-group">
+            <label class="homey-form-label" for="inputUserKeyValue">User Key</label>
+            <input class="homey-form-input" id="inputUserKeyValue" type="text" value="" placeholder="Insert User Key here" />
+            <small class="text-muted">User Key is found at Pushover.net "Your User Key"</small>
+        </div>
+
+        <div class="homey-form-group">
+            <label class="homey-form-label" for="inputDevicesValue">Devices</label>
+            <input class="homey-form-input" id="inputDevicesValue" type="text" value="" placeholder="Insert Devices here, seperate with ; for multiple" />
+            <small class="text-muted">Provide a list of devices here. For multiple seperate with ;. Example: iphone;ipad</small>
+        </div>
+
+    </fieldset>
+
+    <button id="save" class="homey-button-primary-full">Save changes</button>
+
+    <script type="text/javascript">
+        // a method named 'onHomeyReady' must be present in your code
+        function onHomeyReady(Homey) {
+            // Tell Homey we're ready to be displayed
+            Homey.ready();
+
+            var inputTokenValueElement    = document.getElementById("inputTokenValue");
+            var inputUserKeyValueElement  = document.getElementById("inputUserKeyValue");
+            var inputDevicesValueElement  = document.getElementById("inputDevicesValue");
+            var saveElement = document.getElementById("save");
+
+            Homey.get("PushoverToken", function (err, token) {
+                if (err) return Homey.alert(err);
+                inputTokenValueElement.value = token;
+            });
+            
+            Homey.get("PushoverUserKey", function (err, userKey) {
+                if (err) return Homey.alert(err);
+                inputUserKeyValueElement.value = userKey;
+            });
+
+            Homey.get("PushoverDevices", function (err, devices) {
+                if (err) return Homey.alert(err);
+                inputDevicesValueElement.value = devices;
+            });
+
+
+            saveElement.addEventListener("click", function (e) {
+                var anySaveErrors = false;
+
+                Homey.set("PushoverToken", inputTokenValueElement.value, function (err) {
+                    if (err) {
+                        anySaveErrors = true;
+                        return Homey.alert(err);
+                    } 
+                });
+
+                Homey.set("PushoverUserKey", inputUserKeyValueElement.value, function (err) {
+                    if (err) {
+                        anySaveErrors = true;
+                        return Homey.alert(err);
+                    } 
+                });
+
+                Homey.set("PushoverDevices", inputDevicesValueElement.value, function (err) {
+                    if (err) {
+                        anySaveErrors = true;
+                        return Homey.alert(err);
+                    } 
+                });
+                
+                if (!anySaveErrors)
+                    return Homey.alert("Settings saved. You can close this dialog now.");
+                else
+                    return Homey.alert("Error occured.");
+
+            });
+        }
+    </script>
+</body>
+
+</html>
