@@ -1,1 +1,3 @@
-Pushover is a service to receive instant push notifications on your phone or tablet from a variety of sources.
+App for sending notification via Pushover.net Notification api.
+
+You are able to specify title and message. This app also supports snapshots. Snapshots are very handy when sending a snapshot from you survailance camera or other images to a device.
