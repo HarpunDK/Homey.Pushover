@@ -1,5 +1,8 @@
 {
   "1.0.0": {
     "en": "Initial release. Support for Pushover."
+  },
+  "1.0.1": {
+    "en": "Changed app-icon and added better description"
   }
 }
