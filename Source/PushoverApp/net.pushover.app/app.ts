@@ -1,14 +1,17 @@
 import Homey from 'homey';
 import axios from 'axios';
 import _ from 'underscore';
+import { PushoverHelper } from './Service/PushoverHelper';
+import { HomeyAutocompleteHelper } from './Service/HomeyAutocompleteHelper';
+import { PushoverApi } from './Service/PushoverApi';
 
-class MyApp extends Homey.App {
+class PushoverApp extends Homey.App {
 
   /**
    * onInit is called when the app is initialized.
    */
   async onInit() {
-    this.log('MyApp has been initialized');
+    this.log('PushoverApp has been initialized');
 
     // Image support
     const snapshot = await this.homey.images.createImage();
@@ -20,118 +23,108 @@ class MyApp extends Homey.App {
     });
     snapshotToken.setValue(snapshot);
 
-    //#region  [ send-notification ]
-    const card = this.homey.flow.getActionCard("send-notification");
-    
+    var pushoverDevicesFromConfiguration = this.homey.settings.get("PushoverDevices");
+    var pushoverTokenFromConfiguration = this.homey.settings.get("PushoverToken");
+    var pushoverUserFromConfiguration = this.homey.settings.get("PushoverUserKey");
 
-    card.registerArgumentAutocompleteListener("device", async (query, args) => {
-      
-      var pushoverDevices = this.homey.settings.get("PushoverDevices");
-      
-      const deviceCollection = _.map(pushoverDevices.split(";"), (device: string) => {
-        return {
-          "name": device,
-          "id": device
-        };
-      });
-      
-      // filter based on the query
-      return deviceCollection.filter((result) => {
-        return result.name.toLowerCase().includes(query.toLowerCase());
-      });
-      
-    });
-    
+    const pushoverApiClient = new PushoverApi(pushoverTokenFromConfiguration, pushoverUserFromConfiguration, this);
+
+    const card = this.homey.flow.getActionCard("send-notification");
+    const cardWithSoundAndPriority = this.homey.flow.getActionCard("send-notification_sound_priority");
+    const cardWithImage = this.homey.flow.getActionCard("send-notification-with-image");
+    const cardWithImageAndSoundAndPriority = this.homey.flow.getActionCard("send-notification_sound_priority_with_image");
+
+    HomeyAutocompleteHelper.RegisterAutocomplete(card, "device", PushoverHelper.ResolveDeviceCollection(pushoverDevicesFromConfiguration));
+
+    HomeyAutocompleteHelper.RegisterAutocomplete(cardWithSoundAndPriority, "device", PushoverHelper.ResolveDeviceCollection(pushoverDevicesFromConfiguration));
+    HomeyAutocompleteHelper.RegisterAutocomplete(cardWithSoundAndPriority, "sound", PushoverHelper.GetSoundCollection());
+    HomeyAutocompleteHelper.RegisterAutocomplete(cardWithSoundAndPriority, "priority", PushoverHelper.GetPriorityCollection());
+
+    HomeyAutocompleteHelper.RegisterAutocomplete(cardWithImage, "device", PushoverHelper.ResolveDeviceCollection(pushoverDevicesFromConfiguration));
+
+    HomeyAutocompleteHelper.RegisterAutocomplete(cardWithImageAndSoundAndPriority, "device", PushoverHelper.ResolveDeviceCollection(pushoverDevicesFromConfiguration));
+    HomeyAutocompleteHelper.RegisterAutocomplete(cardWithImageAndSoundAndPriority, "sound", PushoverHelper.GetSoundCollection());
+    HomeyAutocompleteHelper.RegisterAutocomplete(cardWithImageAndSoundAndPriority, "priority", PushoverHelper.GetPriorityCollection());
+
     card.registerRunListener(async (args) => {
       var title = args.title;
       var message = args.message;
       var device = args.device.id;
-      
-      // Arrange: settings
-      var pushoverToken = this.homey.settings.get("PushoverToken");
-      var pushoverUser = this.homey.settings.get("PushoverUserKey");
-      
+
       var body = {
-        token: pushoverToken,
-        user: pushoverUser,
         device: device,
         title: title,
         message: message
       };
-      
-      axios.post("https://api.pushover.net/1/messages.json", body)
-      .then((response) => {
-        this.log("Command send", response.data);
-      })
-      .catch((error) => {
-        this.log("ERROR", error);
-      })
-      .finally(() => {
-        // always executed
-      });
-            
-    });
-    //#endregion
-    
-    //#region [ send-notification-with-image ]
-    
-    const cardWithImage = this.homey.flow.getActionCard("send-notification-with-image");
-    cardWithImage.registerArgumentAutocompleteListener("device", async (query, args) => {
-      
-      var pushoverDevices = this.homey.settings.get("PushoverDevices");
-      
-      const deviceCollection = _.map(pushoverDevices.split(";"), (device: string) => {
-        return {
-          "name": device,
-          "id": device
-        };
-      });
-      
-      // filter based on the query
-      return deviceCollection.filter((result) => {
-        return result.name.toLowerCase().includes(query.toLowerCase());
-      });
 
+      await pushoverApiClient.SendMessage(body);
     });
 
-    cardWithImage.registerRunListener(async (args, state) => {
-      // Arrange: settings
-      var pushoverToken = this.homey.settings.get("PushoverToken");
-      var pushoverUser  = this.homey.settings.get("PushoverUserKey");
-
+    cardWithSoundAndPriority.registerRunListener(async (args, state) => {
       // Arrange 
       var title = args.title;
       var message = args.message;
       var device = args.device.id;
-      var image = args.droptoken;      
-      var imageBase64 = await this.getBase64(image.cloudUrl); 
-    
+      var sound = args.sound.id;
+      var priority = args.priority.id;
+
       var body = {
-        token: pushoverToken,
-        user: pushoverUser,
         device: device,
         title: title,
         message: message,
-        attachment_base64 : imageBase64,
+        priority: priority,
+        sound: sound
+      };
+
+      await pushoverApiClient.SendMessage(body);
+    });
+
+    cardWithImage.registerRunListener(async (args, state) => {
+      // Arrange 
+      var title = args.title;
+      var message = args.message;
+      var device = args.device.id;
+      var image = args.droptoken;
+      var imageBase64 = await this.getBase64(image.localUrl);
+
+      var body = {
+        device: device,
+        title: title,
+        message: message,
+        attachment_base64: imageBase64,
         attachment_type: "image/jpeg"
       };
 
-      axios.post("https://api.pushover.net/1/messages.json", body)
-      .then((response) => {
-        this.log("Command send", response.data);
-      })
-      .catch((error) => {
-        this.log("ERROR", error);
-      })
-      .finally(() => {
-        // always executed
-      });
+      await pushoverApiClient.SendMessage(body);
     });
 
-    //#endregion
+    cardWithImageAndSoundAndPriority.registerRunListener(async (args, state) => {
+      // Arrange 
+      var title = args.title;
+      var message = args.message;
+      var device = args.device.id;
+      var image = args.droptoken;
+      var imageBase64 = await this.getBase64(image.localUrl);
+      var sound = args.sound.id;
+      var priority = args.priority.id;
+
+      var body = {
+        device: device,
+        title: title,
+        message: message,
+        priority: priority,
+        sound: sound,
+        attachment_base64: imageBase64,
+        attachment_type: "image/jpeg"
+      };
+
+      await pushoverApiClient.SendMessage(body);
+    });
+
+
   }
 
-  public getBase64 = (url:string) => {
+  public getBase64 = (url: string) => {
     return axios
       .get(url, {
         responseType: 'arraybuffer'
@@ -141,4 +134,4 @@ class MyApp extends Homey.App {
 
 }
 
-module.exports = MyApp;
+module.exports = PushoverApp;
