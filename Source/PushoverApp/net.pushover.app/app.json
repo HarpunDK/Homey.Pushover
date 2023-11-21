@@ -1,7 +1,7 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "net.pushover.app",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "compatibility": ">=5.0.0",
   "sdk": 3,
   "platforms": [
@@ -74,10 +74,121 @@
       },
       {
         "title": {
+          "en": "Send notification with priority and sound"
+        },
+        "titleFormatted": {
+          "en": "Send notification with [[title]] and [[message]] to [[device]] with [[priority]] and [[sound]]"
+        },
+        "hint": {
+          "en": "Send Pushover notification with priority and sound"
+        },
+        "args": [
+          {
+            "type": "text",
+            "name": "message",
+            "title": "Message",
+            "placeholder": {
+              "en": "Enter message"
+            }
+          },
+          {
+            "type": "text",
+            "name": "title",
+            "title": "Title",
+            "placeholder": {
+              "en": "Enter title"
+            }
+          },
+          {
+            "type": "autocomplete",
+            "name": "device",
+            "title": "Device",
+            "placeholder": {
+              "en": "Choose device"
+            }
+          },
+          {
+            "type": "autocomplete",
+            "name": "priority",
+            "title": "Priority",
+            "placeholder": {
+              "en": "Choose Priority"
+            }
+          },
+          {
+            "type": "autocomplete",
+            "name": "sound",
+            "title": "Sound",
+            "placeholder": {
+              "en": "Choose Sound"
+            }
+          }
+        ],
+        "id": "send-notification_sound_priority"
+      },
+      {
+        "title": {
+          "en": "Send notification with image and priority and sound"
+        },
+        "titleFormatted": {
+          "en": "Send notification with [[title]] and [[message]] and with [[droptoken]] to [[device]] with [[priority]] and [[sound]]"
+        },
+        "hint": {
+          "en": "Send Pushover notification with image and priority and sound"
+        },
+        "droptoken": [
+          "image"
+        ],
+        "args": [
+          {
+            "type": "text",
+            "name": "message",
+            "title": "Message",
+            "placeholder": {
+              "en": "Enter message"
+            }
+          },
+          {
+            "type": "text",
+            "name": "title",
+            "title": "Title",
+            "placeholder": {
+              "en": "Enter title"
+            }
+          },
+          {
+            "type": "autocomplete",
+            "name": "device",
+            "title": "Device",
+            "placeholder": {
+              "en": "Choose device"
+            }
+          },
+          {
+            "type": "autocomplete",
+            "name": "priority",
+            "title": "Priority",
+            "placeholder": {
+              "en": "Choose Priority"
+            }
+          },
+          {
+            "type": "autocomplete",
+            "name": "sound",
+            "title": "Sound",
+            "placeholder": {
+              "en": "Choose Sound"
+            }
+          }
+        ],
+        "id": "send-notification_sound_priority_with_image"
+      },
+      {
+        "title": {
           "en": "Send notification with image"
         },
         "titleFormatted": {
-          "en": "Send notification with [[title]] and [[message]] with [[droptoken]] to [[device]]"
+          "en": "Send notification with [[title]] and [[message]] and with [[droptoken]] to [[device]]"
         },
         "hint": {
           "en": "Send Pushover notification with image"
