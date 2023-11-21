@@ -1,0 +1,54 @@
+{
+  "title": {
+    "en": "Send notification with image and priority and sound"
+  },
+  "titleFormatted": {
+    "en": "Send notification with [[title]] and [[message]] and with [[droptoken]] to [[device]] with [[priority]] and [[sound]]"
+  },
+  "hint": {
+    "en": "Send Pushover notification with image and priority and sound"
+  },
+  "droptoken": ["image"],
+  "args": [
+    {
+      "type": "text",
+      "name": "message",
+      "title": "Message",
+      "placeholder": {
+        "en": "Enter message"
+      }
+    },
+    {
+      "type": "text",
+      "name": "title",
+      "title": "Title",
+      "placeholder": {
+        "en": "Enter title"
+      }
+    },
+    {
+      "type": "autocomplete",
+      "name": "device",
+      "title": "Device",
+      "placeholder": {
+        "en": "Choose device"
+      }
+    },
+    {
+      "type": "autocomplete",
+      "name": "priority",
+      "title": "Priority",
+      "placeholder": {
+        "en": "Choose Priority"
+      }
+    },
+    {
+      "type": "autocomplete",
+      "name": "sound",
+      "title": "Sound",
+      "placeholder": {
+        "en": "Choose Sound"
+      }
+    }
+  ]
+}

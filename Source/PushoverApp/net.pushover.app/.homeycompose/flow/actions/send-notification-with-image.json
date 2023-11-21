@@ -3,7 +3,7 @@
     "en": "Send notification with image"
   },
   "titleFormatted": {
-    "en": "Send notification with [[title]] and [[message]] with [[droptoken]] to [[device]]"
+    "en": "Send notification with [[title]] and [[message]] and with [[droptoken]] to [[device]]"
   },
   "hint": {
     "en": "Send Pushover notification with image"
