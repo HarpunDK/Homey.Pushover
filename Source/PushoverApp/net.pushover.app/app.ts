@@ -23,9 +23,9 @@ class PushoverApp extends Homey.App {
     });
     snapshotToken.setValue(snapshot);
 
-    var pushoverDevicesFromConfiguration = this.homey.settings.get("PushoverDevices");
-    var pushoverTokenFromConfiguration = this.homey.settings.get("PushoverToken");
-    var pushoverUserFromConfiguration = this.homey.settings.get("PushoverUserKey");
+    var pushoverDevicesFromConfiguration = this.homey.settings.get("PushoverDevices") || '';
+    var pushoverTokenFromConfiguration   = this.homey.settings.get("PushoverToken") || '';
+    var pushoverUserFromConfiguration    = this.homey.settings.get("PushoverUserKey") || '';
 
     const pushoverApiClient = new PushoverApi(pushoverTokenFromConfiguration, pushoverUserFromConfiguration, this);
 

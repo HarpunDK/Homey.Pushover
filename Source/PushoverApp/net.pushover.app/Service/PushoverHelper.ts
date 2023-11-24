@@ -42,6 +42,7 @@ export class PushoverHelper {
     }
 
     static ResolveDeviceCollection(deviceCollection:string) : Array<AutocompleteItemType> {
+        
         return _.map(deviceCollection.split(";"), (device: string) => {
             return {
               name: device,

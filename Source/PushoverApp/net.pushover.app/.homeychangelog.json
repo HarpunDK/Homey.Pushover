@@ -10,5 +10,8 @@
   },
   "1.0.3": {
     "en": "Pushover app now supports Sound and Priority."
+  },
+  "1.0.4": {
+    "en": "Default value on settings not configured. Getting a lot of crash-reports, due to missing Settings."
   }
 }
