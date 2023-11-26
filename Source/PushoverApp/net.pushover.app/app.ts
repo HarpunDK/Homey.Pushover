@@ -23,9 +23,9 @@ class PushoverApp extends Homey.App {
     });
     snapshotToken.setValue(snapshot);
 
-    var pushoverDevicesFromConfiguration = this.homey.settings.get("PushoverDevices");
-    var pushoverTokenFromConfiguration = this.homey.settings.get("PushoverToken");
-    var pushoverUserFromConfiguration = this.homey.settings.get("PushoverUserKey");
+    var pushoverDevicesFromConfiguration = this.homey.settings.get("PushoverDevices") || '';
+    var pushoverTokenFromConfiguration   = this.homey.settings.get("PushoverToken") || '';
+    var pushoverUserFromConfiguration    = this.homey.settings.get("PushoverUserKey") || '';
 
     const pushoverApiClient = new PushoverApi(pushoverTokenFromConfiguration, pushoverUserFromConfiguration, this);
 
@@ -51,32 +51,41 @@ class PushoverApp extends Homey.App {
       var message = args.message;
       var device = args.device.id;
 
-      var body = {
-        device: device,
-        title: title,
-        message: message
-      };
+      try {
+        var body = {
+          device: device,
+          title: title,
+          message: message
+        };
+  
+        await pushoverApiClient.SendMessage(body);
+      } catch (e: any) {
+        this.error("Error occured", e);
+      }
 
-      await pushoverApiClient.SendMessage(body);
     });
 
     cardWithSoundAndPriority.registerRunListener(async (args, state) => {
-      // Arrange 
-      var title = args.title;
-      var message = args.message;
-      var device = args.device.id;
-      var sound = args.sound.id;
-      var priority = args.priority.id;
+      try  { 
+        // Arrange 
+          var title = args.title;
+          var message = args.message;
+          var device = args.device.id;
+          var sound = args.sound.id;
+          var priority = args.priority.id;
 
-      var body = {
-        device: device,
-        title: title,
-        message: message,
-        priority: priority,
-        sound: sound
-      };
+          var body = {
+            device: device,
+            title: title,
+            message: message,
+            priority: priority,
+            sound: sound
+          };
 
-      await pushoverApiClient.SendMessage(body);
+          await pushoverApiClient.SendMessage(body);
+      } catch (e: any) {
+        this.error("Error occured", e);
+      }
     });
 
     cardWithImage.registerRunListener(async (args, state) => {
@@ -87,15 +96,21 @@ class PushoverApp extends Homey.App {
       var image = args.droptoken;
       var imageBase64 = await this.getBase64(image.localUrl);
 
-      var body = {
-        device: device,
-        title: title,
-        message: message,
-        attachment_base64: imageBase64,
-        attachment_type: "image/jpeg"
-      };
+      try  {
+        var body = {
+          device: device,
+          title: title,
+          message: message,
+          attachment_base64: imageBase64,
+          attachment_type: "image/jpeg"
+        };
+  
+        await pushoverApiClient.SendMessage(body);
+        
+      } catch (e: any) {
+        this.error("Error occured", e);
+      }
 
-      await pushoverApiClient.SendMessage(body);
     });
 
     cardWithImageAndSoundAndPriority.registerRunListener(async (args, state) => {
