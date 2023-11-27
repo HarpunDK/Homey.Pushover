@@ -15,6 +15,8 @@
             <!-- This field will also be translated -->
         </p>
     </header>
+    
+    <div>See your settings in Pushover.Api here, by following this link <a href="https://pushover.net/#apps" target="_blank">Pushover settings</a>.</div>
 
     <fieldset class="homey-form-fieldset">
         <legend class="homey-form-legend">Pushover.net Settings</legend>
@@ -33,8 +35,39 @@
 
         <div class="homey-form-group">
             <label class="homey-form-label" for="inputDevicesValue">Devices</label>
-            <input class="homey-form-input" id="inputDevicesValue" type="text" value="" placeholder="Insert Devices here, seperate with ; for multiple" />
+            <input class="homey-form-input" id="inputDevicesValue" type="text" value="" placeholder="Fill in Devices here, seperate with ; for multiple" />
             <small class="text-muted">Provide a list of devices here. For multiple seperate with ;. Example: iphone;ipad</small>
+        </div>
+
+        <div class="homey-form-group">
+            <label class="homey-form-label" for="inputGroupsValue">Groups</label>
+            <input class="homey-form-input" id="inputGroupsValue" type="text" value="" placeholder="Fill in Groups here, seperate with ; for multiple" />
+            <small class="text-muted">
+                <em>(Groups are not mandatory)</em><br>
+                Provide a list of groups here. For multiple seperate with ;. Example: 1564156gfrew516;3424231565fdfdsfs516. <br>
+                To use aliases with groups, fill in: Group 1:1564156gfrew516;Group 2:3424231565fdfdsfs516 - this will result in Group1, Group2 in the dropdown of the flow-cards.                
+            </small>
+        </div>
+
+        <hr />
+
+        <div class="homey-form-group">
+            <strong>Alias</strong> Devices and Groups now supports aliases. To use alias, seperate your device/group with `:` <code>alias</code>:<code>device</code>. Example: iPhone 14:iphone. Example for group: Group 1:1564156gfrew516
+            This will generate "iPhone 14" in the dropdown, but value used for Pushover.Api is iphone.
+        </div>
+        
+        <div class="homey-form-group">
+            <strong>Groups in Flows</strong> If you are using flows and variables outside of dropdown for Flow-cards with Pushover. Important notice: You have to prefix the value of Groups with <u>G#</u>. <br />
+            In order to distinguish Groups from devices - this prefix is mandatory. Otherwise this app will use the Group as Device - this might give unexpected results.
+        </div>
+        
+        <hr />
+
+        <div class="homey-form-group">
+            <strong>Difficult?</strong> Its okay it's hard to configure. Trying to keep it simple and this configuration are in the settings-area - expected to be "admin-like".<br />
+            <br />
+            <mark>As with application API tokens, user keys should be considered private and not disclosed to 3rd parties. Users should be able to update their identifiers and/or device names with your application or service.</mark>
+
         </div>
 
         <hr />
@@ -56,6 +89,7 @@
             var inputTokenValueElement    = document.getElementById("inputTokenValue");
             var inputUserKeyValueElement  = document.getElementById("inputUserKeyValue");
             var inputDevicesValueElement  = document.getElementById("inputDevicesValue");
+            var inputGroupsValueElement   = document.getElementById("inputGroupsValue");
             var saveElement = document.getElementById("save");
 
             Homey.get("PushoverToken", function (err, token) {
@@ -71,6 +105,11 @@
             Homey.get("PushoverDevices", function (err, devices) {
                 if (err) return Homey.alert(err);
                 inputDevicesValueElement.value = devices;
+            });
+
+            Homey.get("PushoverGroups", function (err, groups) {
+                if (err) return Homey.alert(err);
+                inputGroupsValueElement.value = groups;
             });
 
 
@@ -97,9 +136,16 @@
                         return Homey.alert(err);
                     } 
                 });
+
+                Homey.set("PushoverGroups", inputGroupsValueElement.value, function (err) {
+                    if (err) {
+                        anySaveErrors = true;
+                        return Homey.alert(err);
+                    } 
+                });
                 
                 if (!anySaveErrors)
-                    return Homey.alert("Settings saved. You can close this dialog now.");
+                    return Homey.alert("Settings saved. You can close this dialog now. \nPlease restart the Application - for the new settings to take effect.");
                 else
                     return Homey.alert("Error occured.");
 

@@ -42,12 +42,45 @@ export class PushoverHelper {
     }
 
     static ResolveDeviceCollection(deviceCollection:string) : Array<AutocompleteItemType> {
-        
+        //console.log("###", "deviceCollection", deviceCollection);
         return _.map(deviceCollection.split(";"), (device: string) => {
+            var deviceWithAlias = device.split(":", 2);
+            
+            if (Array.isArray(deviceWithAlias) && deviceWithAlias.length === 2) {  // device-part contains alias - due to the use of ':'
+                return {
+                    name:   deviceWithAlias[0],
+                    id:     deviceWithAlias[1]
+                };
+            }
+
             return {
               name: device,
               id: device
             };
         });
     }
+
+    static ResolveGroupCollection(groupCollection:string) : Array<AutocompleteItemType> {
+        if (groupCollection.length === 0) // On empty, resturn empty
+            return [];
+        
+        //console.log("###", "deviceCollection", deviceCollection);
+        return _.map(groupCollection.split(";"), (group: string) => {
+            var groupWithAlias = group.split(":", 2);
+            
+            if (Array.isArray(groupWithAlias) && groupWithAlias.length === 2) {  // device-part contains alias - due to the use of ':'
+                return {
+                    name: groupWithAlias[0],
+                    id: `G#${groupWithAlias[1]}`
+                };
+            }
+
+            return {
+              name: group,
+              id: `G#${group}`
+            };
+        });
+    }
+
+    
 }
