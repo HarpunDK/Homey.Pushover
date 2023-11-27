@@ -11,7 +11,9 @@ export class PushoverApi {
 
         // Push values into body
         body.token = this.PushoverToken;
-        body.user = this.PushoverUserKey;
+        body.user  = body.group ?? this.PushoverUserKey; // If group are supplied, group > user 
+
+        //this.BaseClass.log("sending message", "==>", body);
 
         axios.post("https://api.pushover.net/1/messages.json", body)
             .then((response) => {

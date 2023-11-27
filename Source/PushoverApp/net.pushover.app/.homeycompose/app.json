@@ -1,6 +1,6 @@
 {
   "id": "net.pushover.app",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "compatibility": ">=5.0.0",
   "sdk": 3,
   "platforms": [
@@ -30,6 +30,13 @@
   "support": "https://github.com/HarpunDK/Homey.Pushover",
   "bugs": {
     "url": "https://github.com/HarpunDK/Homey.Pushover"
+  },
+  "contributing": {
+    "donate": {
+      "paypal": {
+        "username": "KimKokholm"
+      }
+    }
   },
   "homeyCommunityTopicId": 95675
 }
