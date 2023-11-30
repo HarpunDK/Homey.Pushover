@@ -41,16 +41,19 @@ class PushoverApp extends Homey.App {
     var deviceAndGroupCollection = _.union(deviceCollection, groupCollection);
     this.log("devices and groups", deviceAndGroupCollection);
 
+    var pushoverAccountSoundCollection = await pushoverApiClient.GetSoundCollection();
+    var soundCollection = PushoverHelper.ResolveSoundCollection(pushoverAccountSoundCollection);
+
     HomeyAutocompleteHelper.RegisterAutocomplete(card, "device", deviceAndGroupCollection);
 
     HomeyAutocompleteHelper.RegisterAutocomplete(cardWithSoundAndPriority, "device", deviceAndGroupCollection);
-    HomeyAutocompleteHelper.RegisterAutocomplete(cardWithSoundAndPriority, "sound", PushoverHelper.GetSoundCollection());
+    HomeyAutocompleteHelper.RegisterAutocomplete(cardWithSoundAndPriority, "sound", soundCollection);
     HomeyAutocompleteHelper.RegisterAutocomplete(cardWithSoundAndPriority, "priority", PushoverHelper.GetPriorityCollection());
 
     HomeyAutocompleteHelper.RegisterAutocomplete(cardWithImage, "device", deviceAndGroupCollection);
 
     HomeyAutocompleteHelper.RegisterAutocomplete(cardWithImageAndSoundAndPriority, "device", deviceAndGroupCollection);
-    HomeyAutocompleteHelper.RegisterAutocomplete(cardWithImageAndSoundAndPriority, "sound", PushoverHelper.GetSoundCollection());
+    HomeyAutocompleteHelper.RegisterAutocomplete(cardWithImageAndSoundAndPriority, "sound", soundCollection);
     HomeyAutocompleteHelper.RegisterAutocomplete(cardWithImageAndSoundAndPriority, "priority", PushoverHelper.GetPriorityCollection());
 
     card.registerRunListener(async (args) => {
