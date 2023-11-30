@@ -1,6 +1,6 @@
 {
   "id": "net.pushover.app",
-  "version": "1.0.5",
+  "version": "1.0.7",
   "compatibility": ">=5.0.0",
   "sdk": 3,
   "platforms": [
@@ -38,5 +38,12 @@
       }
     }
   },
-  "homeyCommunityTopicId": 95675
+  "homeyCommunityTopicId": 95675,
+  "contributors": {
+    "developers": [
+      {
+        "name": "PandaNL"
+      }
+    ]
+  }
 }

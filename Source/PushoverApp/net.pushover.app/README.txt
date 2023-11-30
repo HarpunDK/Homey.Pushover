@@ -6,5 +6,4 @@ Please verify that configuration is properly defined. Visit Homey > Settings > [
 Fields in configuration is mandatory.
 
 
-If you appreciate this and want to give a tip, use the following link:
-https://www.paypal.com/donate/?business=WJ4994R47H3TJ&no_recurring=0&item_name=Tip+for+efford+at+developing+this+app.+Tip+is+appreciated.&currency_code=DKK
+If you appreciate this and want to give a tip, hit the donate button in the top of the page.

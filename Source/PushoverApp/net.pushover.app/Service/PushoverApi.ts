@@ -29,4 +29,11 @@ export class PushoverApi {
 
     }
 
+    public GetSoundCollection = async () : Promise<any> => {
+        var token = this.PushoverToken;
+        
+        var response = await axios.get(`https://api.pushover.net/1/sounds.json?token=${token}`).then();
+        return response.data;
+    }
+
 }
