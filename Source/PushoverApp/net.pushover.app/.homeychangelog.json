@@ -22,5 +22,8 @@
   },
   "1.0.7": {
     "en": "Update description."
+  },
+  "1.0.8": {
+    "en": "Handling of missing Token. Error replaced."
   }
 }
