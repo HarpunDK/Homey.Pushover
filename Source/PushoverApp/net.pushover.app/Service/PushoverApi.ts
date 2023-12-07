@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { SimpleClass } from 'homey';
+import { PushoverHelper } from './PushoverHelper';
 
 export class PushoverApi {
 
@@ -32,8 +33,19 @@ export class PushoverApi {
     public GetSoundCollection = async () : Promise<any> => {
         var token = this.PushoverToken;
         
+        if ((token || '').length === 0){
+            this.BaseClass.log("Token null or empty - cannot get sound-collection");
+            return PushoverHelper.GetSoundCollection();
+        }
+
         var response = await axios.get(`https://api.pushover.net/1/sounds.json?token=${token}`).then();
         return response.data;
+    }
+
+
+    public ThrowErrorOnEmptyToken = () => {
+        if ((this.PushoverToken || '').length === 0)
+            throw Error("Operation failed. Missing Token detected. Visit App-settings to set Token. Breaking bad.");
     }
 
 }

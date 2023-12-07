@@ -23,16 +23,16 @@ class PushoverApp extends Homey.App {
     });
     snapshotToken.setValue(snapshot);
 
-    var pushoverDevicesFromConfiguration = this.homey.settings.get("PushoverDevices") || '';
-    var pushoverGroupsFromConfiguration = this.homey.settings.get("PushoverGroups") || '';
-    var pushoverTokenFromConfiguration = this.homey.settings.get("PushoverToken") || '';
-    var pushoverUserFromConfiguration = this.homey.settings.get("PushoverUserKey") || '';
+    var pushoverDevicesFromConfiguration  = this.homey.settings.get("PushoverDevices") || '';
+    var pushoverGroupsFromConfiguration   = this.homey.settings.get("PushoverGroups") || '';
+    var pushoverTokenFromConfiguration    = this.homey.settings.get("PushoverToken") || '';
+    var pushoverUserFromConfiguration     = this.homey.settings.get("PushoverUserKey") || '';
 
     const pushoverApiClient = new PushoverApi(pushoverTokenFromConfiguration, pushoverUserFromConfiguration, this);
 
-    const card = this.homey.flow.getActionCard("send-notification");
-    const cardWithSoundAndPriority = this.homey.flow.getActionCard("send-notification_sound_priority");
-    const cardWithImage = this.homey.flow.getActionCard("send-notification-with-image");
+    const card                             = this.homey.flow.getActionCard("send-notification");
+    const cardWithSoundAndPriority         = this.homey.flow.getActionCard("send-notification_sound_priority");
+    const cardWithImage                    = this.homey.flow.getActionCard("send-notification-with-image");
     const cardWithImageAndSoundAndPriority = this.homey.flow.getActionCard("send-notification_sound_priority_with_image");
 
     var deviceCollection = PushoverHelper.ResolveDeviceCollection(pushoverDevicesFromConfiguration);
@@ -57,6 +57,9 @@ class PushoverApp extends Homey.App {
     HomeyAutocompleteHelper.RegisterAutocomplete(cardWithImageAndSoundAndPriority, "priority", PushoverHelper.GetPriorityCollection());
 
     card.registerRunListener(async (args) => {
+      
+      pushoverApiClient.ThrowErrorOnEmptyToken();
+      
       var title = args.title;
       var message = args.message;
       var device = args.device.id.startsWith("G#") ? null : args.device.id; // If group - device must be null
@@ -78,6 +81,9 @@ class PushoverApp extends Homey.App {
     });
 
     cardWithSoundAndPriority.registerRunListener(async (args, state) => {
+      
+      pushoverApiClient.ThrowErrorOnEmptyToken();
+      
       try {
 
         // Arrange 
@@ -105,6 +111,9 @@ class PushoverApp extends Homey.App {
     });
 
     cardWithImage.registerRunListener(async (args, state) => {
+      
+      pushoverApiClient.ThrowErrorOnEmptyToken();
+      
       // Arrange 
       var title = args.title;
       var message = args.message;
@@ -132,6 +141,9 @@ class PushoverApp extends Homey.App {
     });
 
     cardWithImageAndSoundAndPriority.registerRunListener(async (args, state) => {
+      
+      pushoverApiClient.ThrowErrorOnEmptyToken();
+      
       // Arrange 
       var title = args.title;
       var message = args.message;
