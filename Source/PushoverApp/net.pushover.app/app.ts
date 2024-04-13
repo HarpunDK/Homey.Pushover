@@ -33,6 +33,7 @@ class PushoverApp extends Homey.App {
     const card                             = this.homey.flow.getActionCard("send-notification");
     const cardWithSoundAndPriority         = this.homey.flow.getActionCard("send-notification_sound_priority");
     const cardWithImage                    = this.homey.flow.getActionCard("send-notification-with-image");
+    const cardWithUrl                      = this.homey.flow.getActionCard("send-notification-with-url");
     const cardWithImageAndSoundAndPriority = this.homey.flow.getActionCard("send-notification_sound_priority_with_image");
 
     var deviceCollection = PushoverHelper.ResolveDeviceCollection(pushoverDevicesFromConfiguration);
@@ -51,6 +52,7 @@ class PushoverApp extends Homey.App {
     HomeyAutocompleteHelper.RegisterAutocomplete(cardWithSoundAndPriority, "priority", PushoverHelper.GetPriorityCollection());
 
     HomeyAutocompleteHelper.RegisterAutocomplete(cardWithImage, "device", deviceAndGroupCollection);
+    HomeyAutocompleteHelper.RegisterAutocomplete(cardWithUrl, "device", deviceAndGroupCollection);
 
     HomeyAutocompleteHelper.RegisterAutocomplete(cardWithImageAndSoundAndPriority, "device", deviceAndGroupCollection);
     HomeyAutocompleteHelper.RegisterAutocomplete(cardWithImageAndSoundAndPriority, "sound", soundCollection);
@@ -139,6 +141,37 @@ class PushoverApp extends Homey.App {
       }
 
     });
+
+    cardWithUrl.registerRunListener(async (args, state) => {
+      
+      pushoverApiClient.ThrowErrorOnEmptyToken();
+      
+      // Arrange 
+      var title = args.title;
+      var message = args.message;
+      var device = args.device.id.startsWith("G#") ? null : args.device.id; // If group - device must be null
+      var group  = args.device.id.startsWith("G#") ? args.device.id.substring(2) : null; // If group - group id 
+      var url = args.url;
+      var url_title = args.url_title;
+
+      try {
+        var body = {
+          device: device,
+          group: group,
+          title: title,
+          message: message,
+          url: url,
+          url_title: url_title
+        };
+
+        await pushoverApiClient.SendMessage(body);
+
+      } catch (e: any) {
+        this.error("Error occured", e);
+      }
+
+    });
+
 
     cardWithImageAndSoundAndPriority.registerRunListener(async (args, state) => {
       
