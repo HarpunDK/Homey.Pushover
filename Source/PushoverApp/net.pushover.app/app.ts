@@ -30,12 +30,14 @@ class PushoverApp extends Homey.App {
 
     const pushoverApiClient = new PushoverApi(pushoverTokenFromConfiguration, pushoverUserFromConfiguration, this);
 
-    const card                             = this.homey.flow.getActionCard("send-notification");
-    const cardWithSoundAndPriority         = this.homey.flow.getActionCard("send-notification_sound_priority");
-    const cardWithImage                    = this.homey.flow.getActionCard("send-notification-with-image");
-    const cardWithUrl                      = this.homey.flow.getActionCard("send-notification-with-url");
-    const cardWithUrlAndImage              = this.homey.flow.getActionCard("send-notification-with-url-and-image");
-    const cardWithImageAndSoundAndPriority = this.homey.flow.getActionCard("send-notification_sound_priority_with_image");
+    const card                                = this.homey.flow.getActionCard("send-notification");
+    const cardWithSoundAndPriority            = this.homey.flow.getActionCard("send-notification_sound_priority");
+    const cardWithImage                       = this.homey.flow.getActionCard("send-notification-with-image");
+    const cardWithUrl                         = this.homey.flow.getActionCard("send-notification-with-url");
+    const cardWithUrlAndImage                 = this.homey.flow.getActionCard("send-notification-with-url-and-image");
+    const cardWithImageAndSoundAndPriority    = this.homey.flow.getActionCard("send-notification_sound_priority_with_image");
+    const cardWithImageUrlAndSoundAndPriority = this.homey.flow.getActionCard("send-notification-with-url-and-image-priority");
+    
 
     var deviceCollection = PushoverHelper.ResolveDeviceCollection(pushoverDevicesFromConfiguration);
     var groupCollection = PushoverHelper.ResolveGroupCollection(pushoverGroupsFromConfiguration);
@@ -59,6 +61,10 @@ class PushoverApp extends Homey.App {
     HomeyAutocompleteHelper.RegisterAutocomplete(cardWithImageAndSoundAndPriority, "device", deviceAndGroupCollection);
     HomeyAutocompleteHelper.RegisterAutocomplete(cardWithImageAndSoundAndPriority, "sound", soundCollection);
     HomeyAutocompleteHelper.RegisterAutocomplete(cardWithImageAndSoundAndPriority, "priority", PushoverHelper.GetPriorityCollection());
+
+    HomeyAutocompleteHelper.RegisterAutocomplete(cardWithImageUrlAndSoundAndPriority, "device", deviceAndGroupCollection);
+    HomeyAutocompleteHelper.RegisterAutocomplete(cardWithImageUrlAndSoundAndPriority, "sound", soundCollection);
+    HomeyAutocompleteHelper.RegisterAutocomplete(cardWithImageUrlAndSoundAndPriority, "priority", PushoverHelper.GetPriorityCollection());
 
     card.registerRunListener(async (args) => {
       
@@ -228,6 +234,38 @@ class PushoverApp extends Homey.App {
         title: title,
         message: message,
         priority: priority,
+        sound: sound,
+        attachment_base64: imageBase64,
+        attachment_type: "image/jpeg"
+      };
+
+      await pushoverApiClient.SendMessage(body);
+    });
+
+    cardWithImageUrlAndSoundAndPriority.registerRunListener(async (args, state) => {
+      
+      pushoverApiClient.ThrowErrorOnEmptyToken();
+      
+      // Arrange 
+      var title     = args.title;
+      var message   = args.message;
+      var device    = args.device.id.startsWith("G#") ? null : args.device.id; // If group - device must be null
+      var group     = args.device.id.startsWith("G#") ? args.device.id.substring(2) : null; // If group - group id 
+      var url       = args.url;
+      var url_title = args.url_title;
+      var image     = args.droptoken;
+      var imageBase64 = await this.getBase64(image.localUrl);
+      var sound     = args.sound.id;
+      var priority  = args.priority.id;
+
+      var body = {
+        device: device,
+        group: group,
+        title: title,
+        message: message,
+        url: url,
+        url_title: url_title,
+        priority: priority,        
         sound: sound,
         attachment_base64: imageBase64,
         attachment_type: "image/jpeg"
