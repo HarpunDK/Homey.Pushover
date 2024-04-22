@@ -31,5 +31,8 @@
   },
   "1.0.10": {
     "en": "Card with URL and Image combined added."
+  },
+  "1.0.11": {
+    "en": "New card added. Combination with url and priority added."
   }
 }
