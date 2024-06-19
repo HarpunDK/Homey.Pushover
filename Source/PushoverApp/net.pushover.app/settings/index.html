@@ -50,6 +50,14 @@
         </div>
 
         <hr />
+        
+        <div class="homey-form-group">
+            <label class="homey-form-label" for="inputRateLimit">Ratelimit</label>
+            <input class="homey-form-input" id="inputRateLimit" type="text" value="" placeholder="Ratelimit." readonly />
+            <small class="text-muted">Ratelimit of remaining notifications per app left.</small>
+        </div>
+
+        <hr />
 
         <div class="homey-form-group">
             <strong>Alias</strong> Devices and Groups now supports aliases. To use alias, seperate your device/group with `:` <code>alias</code>:<code>device</code>. Example: iPhone 14:iphone. Example for group: Group 1:1564156gfrew516
@@ -90,6 +98,7 @@
             var inputUserKeyValueElement  = document.getElementById("inputUserKeyValue");
             var inputDevicesValueElement  = document.getElementById("inputDevicesValue");
             var inputGroupsValueElement   = document.getElementById("inputGroupsValue");
+            var inputRateLimitElement     = document.getElementById("inputRateLimit");
             var saveElement = document.getElementById("save");
 
             Homey.get("PushoverToken", function (err, token) {
@@ -110,6 +119,11 @@
             Homey.get("PushoverGroups", function (err, groups) {
                 if (err) return Homey.alert(err);
                 inputGroupsValueElement.value = groups;
+            });
+
+            Homey.get("PushoverRateLimit", function (err, groups) {
+                if (err) return Homey.alert(err);
+                inputRateLimitElement.value = groups;
             });
 
 

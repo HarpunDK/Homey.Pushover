@@ -28,7 +28,7 @@ class PushoverApp extends Homey.App {
     var pushoverTokenFromConfiguration    = this.homey.settings.get("PushoverToken") || '';
     var pushoverUserFromConfiguration     = this.homey.settings.get("PushoverUserKey") || '';
 
-    const pushoverApiClient = new PushoverApi(pushoverTokenFromConfiguration, pushoverUserFromConfiguration, this);
+    const pushoverApiClient = new PushoverApi(this.homey.settings, pushoverTokenFromConfiguration, pushoverUserFromConfiguration, this);
 
     const card                                = this.homey.flow.getActionCard("send-notification");
     const cardWithSoundAndPriority            = this.homey.flow.getActionCard("send-notification_sound_priority");
