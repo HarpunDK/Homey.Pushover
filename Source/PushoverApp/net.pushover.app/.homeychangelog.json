@@ -34,5 +34,8 @@
   },
   "1.0.11": {
     "en": "New card added. Combination with url and priority added."
+  },
+  "1.0.12": {
+    "en": "Ratelimit indicated added. Emergency support."
   }
 }

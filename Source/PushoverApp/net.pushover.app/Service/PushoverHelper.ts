@@ -52,7 +52,7 @@ export class PushoverHelper {
             new AutocompleteItemType("-1", "Low Priority"),
             new AutocompleteItemType( "0", "Normal Priority"),
             new AutocompleteItemType( "1", "High Priority"),
-            //new AutocompleteItemType( "2", "Emergency Priority"),
+            new AutocompleteItemType( "2", "Emergency Priority"),
         );
     }
 
