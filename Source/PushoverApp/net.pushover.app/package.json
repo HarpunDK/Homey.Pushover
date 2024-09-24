@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@types/underscore": "^1.11.14",
-    "axios": "^1.6.1",
+    "axios": "^1.7.4",
     "underscore": "^1.13.6"
   }
 }
