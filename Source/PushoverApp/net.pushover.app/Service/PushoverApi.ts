@@ -17,12 +17,12 @@ export class PushoverApi {
 
         // Handle global emergency rule
         if (body.priority == "2") {
-            body.retry  =  5 * 60;
-            body.expire = 20 * 60;
+            body.retry  = body.retry  || 5 * 60;
+            body.expire = body.expire || 20 * 60;
         }
 
-        //this.BaseClass.log("sending message", "==>", body);
-
+        this.BaseClass.log("sending message", "==>", body);
+        console.log("sending message", "==>", body);
         axios.post("https://api.pushover.net/1/messages.json", body)
             .then((response) => {
                 this.BaseClass.log("Command send", response.data);

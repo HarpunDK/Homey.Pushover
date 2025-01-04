@@ -111,7 +111,9 @@ class PushoverApp extends Homey.App {
           title: title,
           message: message,
           priority: priority,
-          sound: sound
+          sound: sound,
+          retry: args.retry,
+          expire: args.expire
         };
 
         await pushoverApiClient.SendMessage(body);
@@ -123,6 +125,7 @@ class PushoverApp extends Homey.App {
     cardWithImage.registerRunListener(async (args, state) => {
       
       pushoverApiClient.ThrowErrorOnEmptyToken();
+      this.log("INPUT", args);
       
       // Arrange 
       var title = args.title;
@@ -131,6 +134,7 @@ class PushoverApp extends Homey.App {
       var group  = args.device.id.startsWith("G#") ? args.device.id.substring(2) : null; // If group - group id 
       var image  = args.droptoken;
       var imageBase64 = await this.getBase64(image.localUrl);
+
 
       try {
         var body = {
@@ -235,6 +239,8 @@ class PushoverApp extends Homey.App {
         message: message,
         priority: priority,
         sound: sound,
+        retry: args.retry,
+        expire: args.expire,        
         attachment_base64: imageBase64,
         attachment_type: "image/jpeg"
       };
@@ -267,6 +273,8 @@ class PushoverApp extends Homey.App {
         url_title: url_title,
         priority: priority,        
         sound: sound,
+        retry: args.retry,
+        expire: args.expire,
         attachment_base64: imageBase64,
         attachment_type: "image/jpeg"
       };
