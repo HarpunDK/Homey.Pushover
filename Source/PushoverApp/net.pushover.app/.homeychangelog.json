@@ -43,5 +43,8 @@
   },
   "1.0.14": {
     "en": "Retry and Expire added to Priority."
+  },
+  "1.0.15": {
+    "en": "Missed optimal arguments for card."
   }
 }
