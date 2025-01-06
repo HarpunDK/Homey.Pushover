@@ -3,7 +3,7 @@
     "en": "Send notification with image and priority and sound"
   },
   "titleFormatted": {
-    "en": "Send notification with [[title]] and [[message]] and with [[droptoken]] to [[device]] with [[priority]] and [[sound]]"
+    "en": "Send notification with [[title]] and [[message]] and with [[droptoken]] to [[device]] with [[priority]] and [[sound]] (for emergency: [[retry]] and [[expire]])"
   },
   "hint": {
     "en": "Send Pushover notification with image and priority and sound"
@@ -48,6 +48,26 @@
       "title": "Sound",
       "placeholder": {
         "en": "Choose Sound"
+      }
+    },
+    {
+      "type": "number",
+      "name": "retry",
+      "min": 30,      
+      "required": false,
+      "title": "Retry",
+      "placeholder": {
+        "en": "Only valid with emergency"
+      }
+    },
+    {
+      "type": "number",
+      "name": "expire",
+      "max": 10800,
+      "required": false,
+      "title": "Expire",
+      "placeholder": {
+        "en": "Only valid with emergency"
       }
     }
   ]
