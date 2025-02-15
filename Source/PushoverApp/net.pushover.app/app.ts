@@ -85,7 +85,8 @@ class PushoverApp extends Homey.App {
 
         await pushoverApiClient.SendMessage(body);
       } catch (e: any) {
-        this.error("Error occured", e);
+        console.error("Error occured", e);
+        throw e;
       }
 
     });
@@ -118,7 +119,8 @@ class PushoverApp extends Homey.App {
 
         await pushoverApiClient.SendMessage(body);
       } catch (e: any) {
-        this.error("Error occured", e);
+        console.error("Error occured", e);
+        throw e;
       }
     });
 
@@ -149,7 +151,8 @@ class PushoverApp extends Homey.App {
         await pushoverApiClient.SendMessage(body);
 
       } catch (e: any) {
-        this.error("Error occured", e);
+        console.error("Error occured", e);
+        throw e;
       }
 
     });
@@ -179,7 +182,8 @@ class PushoverApp extends Homey.App {
         await pushoverApiClient.SendMessage(body);
 
       } catch (e: any) {
-        this.error("Error occured", e);
+        console.error("Error occured", e);
+        throw e;
       }
 
     });
@@ -213,7 +217,8 @@ class PushoverApp extends Homey.App {
         await pushoverApiClient.SendMessage(body);
 
       } catch (e: any) {
-        this.error("Error occured", e);
+        console.error("Error occured", e);
+        throw e;
       }
 
     });
@@ -232,20 +237,26 @@ class PushoverApp extends Homey.App {
       var sound = args.sound.id;
       var priority = args.priority.id;
 
-      var body = {
-        device: device,
-        group: group,
-        title: title,
-        message: message,
-        priority: priority,
-        sound: sound,
-        retry: args.retry,
-        expire: args.expire,        
-        attachment_base64: imageBase64,
-        attachment_type: "image/jpeg"
-      };
+      try {
+        var body = {
+          device: device,
+          group: group,
+          title: title,
+          message: message,
+          priority: priority,
+          sound: sound,
+          retry: args.retry,
+          expire: args.expire,        
+          attachment_base64: imageBase64,
+          attachment_type: "image/jpeg"
+        };
 
-      await pushoverApiClient.SendMessage(body);
+        await pushoverApiClient.SendMessage(body);
+      } catch (e: any) {
+        console.error("Error occured", e);
+        throw e;
+      }
+
     });
 
     cardWithImageUrlAndSoundAndPriority.registerRunListener(async (args, state) => {
@@ -264,22 +275,27 @@ class PushoverApp extends Homey.App {
       var sound     = args.sound.id;
       var priority  = args.priority.id;
 
-      var body = {
-        device: device,
-        group: group,
-        title: title,
-        message: message,
-        url: url,
-        url_title: url_title,
-        priority: priority,        
-        sound: sound,
-        retry: args.retry,
-        expire: args.expire,
-        attachment_base64: imageBase64,
-        attachment_type: "image/jpeg"
-      };
+      try {
+        var body = {
+          device: device,
+          group: group,
+          title: title,
+          message: message,
+          url: url,
+          url_title: url_title,
+          priority: priority,        
+          sound: sound,
+          retry: args.retry,
+          expire: args.expire,
+          attachment_base64: imageBase64,
+          attachment_type: "image/jpeg"
+        };
 
-      await pushoverApiClient.SendMessage(body);
+        await pushoverApiClient.SendMessage(body);
+      } catch (e: any) {
+        this.error("Error occured", e);
+        throw e;
+      }
     });
 
 
