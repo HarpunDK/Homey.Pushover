@@ -49,8 +49,13 @@ export class PushoverApi {
             return PushoverHelper.GetSoundCollection();
         }
 
-        var response = await axios.get(`https://api.pushover.net/1/sounds.json?token=${token}`).then();
-        return response.data;
+        try {
+            var response = await axios.get(`https://api.pushover.net/1/sounds.json?token=${token}`).then();
+            return response.data;
+        } catch (e: any) {
+            console.error("Get Sounds failed with error:", e);
+            return [];
+        }
     }
 
 

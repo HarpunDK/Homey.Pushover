@@ -23,10 +23,14 @@ class PushoverApp extends Homey.App {
     });
     snapshotToken.setValue(snapshot);
 
-    var pushoverDevicesFromConfiguration  = this.homey.settings.get("PushoverDevices") || '';
-    var pushoverGroupsFromConfiguration   = this.homey.settings.get("PushoverGroups") || '';
-    var pushoverTokenFromConfiguration    = this.homey.settings.get("PushoverToken") || '';
-    var pushoverUserFromConfiguration     = this.homey.settings.get("PushoverUserKey") || '';
+    var pushoverDevicesFromConfiguration  =  this.homey.settings.get("PushoverDevices") || '';
+    var pushoverGroupsFromConfiguration   =  this.homey.settings.get("PushoverGroups") || '';
+    var pushoverTokenFromConfiguration    =  this.homey.settings.get("PushoverToken") || '';
+    var pushoverUserFromConfiguration     =  this.homey.settings.get("PushoverUserKey") || '';
+    var pushoverTokenUseCloud             =  this.homey.settings.get('PushoverFlowToken_UseCloudUrl') || false;
+    var pushoverTimeToLive                = (this.homey.settings.get('PushoverTimeToLive') || '').length > 0 ? this.homey.settings.get('PushoverTimeToLive') : null;
+
+console.log("#Settings", pushoverTokenUseCloud);
 
     const pushoverApiClient = new PushoverApi(this.homey.settings, pushoverTokenFromConfiguration, pushoverUserFromConfiguration, this);
 
@@ -80,7 +84,8 @@ class PushoverApp extends Homey.App {
           device: device,
           group: group,
           title: title,
-          message: message
+          message: message,
+          ttl: pushoverTimeToLive
         };
 
         await pushoverApiClient.SendMessage(body);
@@ -98,11 +103,11 @@ class PushoverApp extends Homey.App {
       try {
 
         // Arrange 
-        var title = args.title;
+        var title   = args.title;
         var message = args.message;
-        var device = args.device.id.startsWith("G#") ? null : args.device.id; // If group - device must be null
-        var group  = args.device.id.startsWith("G#") ? args.device.id.substring(2) : null; // If group - group id 
-        var sound  = args.sound.id;
+        var device  = args.device.id.startsWith("G#") ? null : args.device.id; // If group - device must be null
+        var group   = args.device.id.startsWith("G#") ? args.device.id.substring(2) : null; // If group - group id 
+        var sound   = args.sound.id;
         var priority = args.priority.id;
 
 
@@ -111,10 +116,11 @@ class PushoverApp extends Homey.App {
           group: group,
           title: title,
           message: message,
+          ttl: pushoverTimeToLive,
           priority: priority,
           sound: sound,
           retry: args.retry,
-          expire: args.expire
+          expire: args.expire,
         };
 
         await pushoverApiClient.SendMessage(body);
@@ -135,8 +141,8 @@ class PushoverApp extends Homey.App {
       var device = args.device.id.startsWith("G#") ? null : args.device.id; // If group - device must be null
       var group  = args.device.id.startsWith("G#") ? args.device.id.substring(2) : null; // If group - group id 
       var image  = args.droptoken;
-      var imageBase64 = await this.getBase64(image.localUrl);
 
+      var imageBase64 = await this.getBase64(pushoverTokenUseCloud ? image.cloudUrl : image.localUrl);
 
       try {
         var body = {
@@ -144,8 +150,9 @@ class PushoverApp extends Homey.App {
           group: group,
           title: title,
           message: message,
+          ttl: pushoverTimeToLive,
           attachment_base64: imageBase64,
-          attachment_type: "image/jpeg"
+          attachment_type: "image/jpeg",
         };
 
         await pushoverApiClient.SendMessage(body);
@@ -162,11 +169,11 @@ class PushoverApp extends Homey.App {
       pushoverApiClient.ThrowErrorOnEmptyToken();
       
       // Arrange 
-      var title = args.title;
-      var message = args.message;
-      var device = args.device.id.startsWith("G#") ? null : args.device.id; // If group - device must be null
-      var group  = args.device.id.startsWith("G#") ? args.device.id.substring(2) : null; // If group - group id 
-      var url = args.url;
+      var title     = args.title;
+      var message   = args.message;
+      var device    = args.device.id.startsWith("G#") ? null : args.device.id; // If group - device must be null
+      var group     = args.device.id.startsWith("G#") ? args.device.id.substring(2) : null; // If group - group id 
+      var url       = args.url;
       var url_title = args.url_title;
 
       try {
@@ -175,6 +182,7 @@ class PushoverApp extends Homey.App {
           group: group,
           title: title,
           message: message,
+          ttl: pushoverTimeToLive,          
           url: url,
           url_title: url_title
         };
@@ -193,14 +201,14 @@ class PushoverApp extends Homey.App {
       pushoverApiClient.ThrowErrorOnEmptyToken();
       
       // Arrange 
-      var title = args.title;
-      var message = args.message;
-      var device = args.device.id.startsWith("G#") ? null : args.device.id; // If group - device must be null
-      var group  = args.device.id.startsWith("G#") ? args.device.id.substring(2) : null; // If group - group id 
-      var url = args.url;
+      var title     = args.title;
+      var message   = args.message;
+      var device    = args.device.id.startsWith("G#") ? null : args.device.id; // If group - device must be null
+      var group     = args.device.id.startsWith("G#") ? args.device.id.substring(2) : null; // If group - group id 
+      var url       = args.url;
       var url_title = args.url_title;
-      var image  = args.droptoken;
-      var imageBase64 = await this.getBase64(image.localUrl);
+      var image     = args.droptoken;
+      var imageBase64 = await this.getBase64(pushoverTokenUseCloud ? image.cloudUrl : image.localUrl);
 
       try {
         var body = {
@@ -208,6 +216,7 @@ class PushoverApp extends Homey.App {
           group: group,
           title: title,
           message: message,
+          ttl: pushoverTimeToLive,
           url: url,
           url_title: url_title,
           attachment_base64: imageBase64,
@@ -228,13 +237,13 @@ class PushoverApp extends Homey.App {
       pushoverApiClient.ThrowErrorOnEmptyToken();
       
       // Arrange 
-      var title = args.title;
+      var title   = args.title;
       var message = args.message;
-      var device = args.device.id.startsWith("G#") ? null : args.device.id; // If group - device must be null
-      var group  = args.device.id.startsWith("G#") ? args.device.id.substring(2) : null; // If group - group id 
-      var image  = args.droptoken;
-      var imageBase64 = await this.getBase64(image.localUrl);
-      var sound = args.sound.id;
+      var device  = args.device.id.startsWith("G#") ? null : args.device.id; // If group - device must be null
+      var group   = args.device.id.startsWith("G#") ? args.device.id.substring(2) : null; // If group - group id 
+      var image   = args.droptoken;
+      var imageBase64 = await this.getBase64(pushoverTokenUseCloud ? image.cloudUrl : image.localUrl);
+      var sound   = args.sound.id;
       var priority = args.priority.id;
 
       try {
@@ -243,6 +252,7 @@ class PushoverApp extends Homey.App {
           group: group,
           title: title,
           message: message,
+          ttl: pushoverTimeToLive,
           priority: priority,
           sound: sound,
           retry: args.retry,
@@ -271,7 +281,7 @@ class PushoverApp extends Homey.App {
       var url       = args.url;
       var url_title = args.url_title;
       var image     = args.droptoken;
-      var imageBase64 = await this.getBase64(image.localUrl);
+      var imageBase64 = await this.getBase64(pushoverTokenUseCloud ? image.cloudUrl : image.localUrl);
       var sound     = args.sound.id;
       var priority  = args.priority.id;
 
@@ -281,6 +291,7 @@ class PushoverApp extends Homey.App {
           group: group,
           title: title,
           message: message,
+          ttl: pushoverTimeToLive,
           url: url,
           url_title: url_title,
           priority: priority,        
