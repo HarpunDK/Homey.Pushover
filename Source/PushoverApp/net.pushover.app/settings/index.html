@@ -49,12 +49,33 @@
             </small>
         </div>
 
+        <div class="homey-form-group">
+            <label class="homey-form-checkbox">
+                <input class="homey-form-checkbox-input" id="inputChkUseCloudUrl" type="checkbox" name="checkbox-example"/>
+                <span class="homey-form-checkbox-checkmark"></span>
+                <span class="homey-form-checkbox-text">Use CloudUrl</span>
+
+                
+            </label>
+            <small class="text-muted">
+                SHS installations should check: <mark>Use Cloud Url</mark>
+            </small>
+        </div>
+
         <hr />
         
         <div class="homey-form-group">
             <label class="homey-form-label" for="inputRateLimit">Ratelimit</label>
             <input class="homey-form-input" id="inputRateLimit" type="text" value="" placeholder="Ratelimit." readonly />
             <small class="text-muted">Ratelimit of remaining notifications per app left.</small>
+
+            <label class="homey-form-label" for="inputTimeToLive">Time to Live (TTL )</label>
+            <input class="homey-form-input" id="inputTimeToLive" type="number" value="" placeholder="TTL" />
+            <small class="text-muted">
+                The <mark>ttl</mark> parameter specifies a Time to Live in seconds, after which the message will be automatically deleted from the devices it was delivered to. <br />This can be useful for unimportant messages that have a limited usefulness after a short amount of time.
+                <p>the <mark>ttl</mark> value must be a positive number of seconds, and is counted from the time the message is received by our API.</p>
+            </small>
+
         </div>
 
         <hr />
@@ -94,11 +115,13 @@
             // Tell Homey we're ready to be displayed
             Homey.ready();
 
-            var inputTokenValueElement    = document.getElementById("inputTokenValue");
-            var inputUserKeyValueElement  = document.getElementById("inputUserKeyValue");
-            var inputDevicesValueElement  = document.getElementById("inputDevicesValue");
-            var inputGroupsValueElement   = document.getElementById("inputGroupsValue");
-            var inputRateLimitElement     = document.getElementById("inputRateLimit");
+            var inputTokenValueElement     = document.getElementById("inputTokenValue");
+            var inputUserKeyValueElement   = document.getElementById("inputUserKeyValue");
+            var inputDevicesValueElement   = document.getElementById("inputDevicesValue");
+            var inputGroupsValueElement    = document.getElementById("inputGroupsValue");
+            var inputRateLimitElement      = document.getElementById("inputRateLimit");
+            var inputTimeToLiveElement     = document.getElementById("inputTimeToLive");
+            var inputChkUseCloudUrlElement = document.getElementById('inputChkUseCloudUrl')
             var saveElement = document.getElementById("save");
 
             Homey.get("PushoverToken", function (err, token) {
@@ -124,6 +147,16 @@
             Homey.get("PushoverRateLimit", function (err, groups) {
                 if (err) return Homey.alert(err);
                 inputRateLimitElement.value = groups;
+            });
+
+            Homey.get("PushoverTimeToLive", function (err, groups) {
+                if (err) return Homey.alert(err);
+                inputTimeToLiveElement.value = groups;
+            });
+
+            Homey.get("PushoverFlowToken_UseCloudUrl", function (err, groups) {
+                if (err) return Homey.alert(err);
+                inputChkUseCloudUrlElement.checked = groups == true;
             });
 
 
@@ -157,6 +190,21 @@
                         return Homey.alert(err);
                     } 
                 });
+
+                Homey.set("PushoverFlowToken_UseCloudUrl", inputChkUseCloudUrlElement.checked, function (err) {
+                    if (err) {
+                        anySaveErrors = true;
+                        return Homey.alert(err);
+                    } 
+                });
+
+                Homey.set("PushoverTimeToLive", inputTimeToLiveElement.value, function (err) {
+                    if (err) {
+                        anySaveErrors = true;
+                        return Homey.alert(err);
+                    } 
+                });
+
                 
                 if (!anySaveErrors)
                     return Homey.alert("Settings saved. You can close this dialog now. \nPlease restart the Application - for the new settings to take effect.");

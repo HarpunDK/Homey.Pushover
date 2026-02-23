@@ -46,5 +46,17 @@
   },
   "1.0.15": {
     "en": "Missed optimal arguments for card."
+  },
+  "1.0.16": {
+    "en": "Stop pesky-error-reports"
+  },
+  "1.0.17": {
+    "en": "TEST for SHS - do not use - It will break!"
+  },
+  "1.0.18": {
+    "en": "Setting added: Support CloudUrl (Flow Token). To support SHS."
+  },
+  "1.0.19": {
+    "en": "Error handling around sounds collection. Support for TTL - user request."
   }
 }
