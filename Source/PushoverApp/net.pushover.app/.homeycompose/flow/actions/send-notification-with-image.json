@@ -3,7 +3,7 @@
     "en": "Send notification with image"
   },
   "titleFormatted": {
-    "en": "Send notification with [[title]] and [[message]] and with [[droptoken]] to [[device]]"
+    "en": "Send notification with [[title]] and [[message]] and with [[droptoken]] to [[device]] with [[ttl]]"
   },
   "hint": {
     "en": "Send Pushover notification with image"
@@ -33,6 +33,15 @@
       "placeholder": {
         "en": "Choose device"
       }
+    },
+    {
+      "type": "number",
+      "name": "ttl",
+      "title": "TTL",
+      "placeholder": {
+        "en": "Time to Live (seconds)"
+      },
+      "required": false
     }    
   ]
 }

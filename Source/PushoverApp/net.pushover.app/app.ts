@@ -28,7 +28,6 @@ class PushoverApp extends Homey.App {
     var pushoverTokenFromConfiguration    =  this.homey.settings.get("PushoverToken") || '';
     var pushoverUserFromConfiguration     =  this.homey.settings.get("PushoverUserKey") || '';
     var pushoverTokenUseCloud             =  this.homey.settings.get('PushoverFlowToken_UseCloudUrl') || false;
-    var pushoverTimeToLive                = (this.homey.settings.get('PushoverTimeToLive') || '').length > 0 ? this.homey.settings.get('PushoverTimeToLive') : null;
 
 console.log("#Settings", pushoverTokenUseCloud);
 
@@ -74,10 +73,11 @@ console.log("#Settings", pushoverTokenUseCloud);
       
       pushoverApiClient.ThrowErrorOnEmptyToken();
       
-      var title = args.title;
+      var title   = args.title;
       var message = args.message;
-      var device = args.device.id.startsWith("G#") ? null : args.device.id; // If group - device must be null
-      var group  = args.device.id.startsWith("G#") ? args.device.id.substring(2) : null; // If group - group id 
+      var ttl     = args.ttl;
+      var device  = args.device.id.startsWith("G#") ? null : args.device.id; // If group - device must be null
+      var group   = args.device.id.startsWith("G#") ? args.device.id.substring(2) : null; // If group - group id 
 
       try {
         var body = {
@@ -85,7 +85,7 @@ console.log("#Settings", pushoverTokenUseCloud);
           group: group,
           title: title,
           message: message,
-          ttl: pushoverTimeToLive
+          ttl: ttl
         };
 
         await pushoverApiClient.SendMessage(body);
@@ -105,18 +105,18 @@ console.log("#Settings", pushoverTokenUseCloud);
         // Arrange 
         var title   = args.title;
         var message = args.message;
+        var ttl     = args.ttl;
         var device  = args.device.id.startsWith("G#") ? null : args.device.id; // If group - device must be null
         var group   = args.device.id.startsWith("G#") ? args.device.id.substring(2) : null; // If group - group id 
         var sound   = args.sound.id;
         var priority = args.priority.id;
-
 
         var body = {
           device: device,
           group: group,
           title: title,
           message: message,
-          ttl: pushoverTimeToLive,
+          ttl: ttl,
           priority: priority,
           sound: sound,
           retry: args.retry,
@@ -136,11 +136,12 @@ console.log("#Settings", pushoverTokenUseCloud);
       this.log("INPUT", args);
       
       // Arrange 
-      var title = args.title;
+      var title   = args.title;
       var message = args.message;
-      var device = args.device.id.startsWith("G#") ? null : args.device.id; // If group - device must be null
-      var group  = args.device.id.startsWith("G#") ? args.device.id.substring(2) : null; // If group - group id 
-      var image  = args.droptoken;
+      var ttl     = args.ttl;
+      var device  = args.device.id.startsWith("G#") ? null : args.device.id; // If group - device must be null
+      var group   = args.device.id.startsWith("G#") ? args.device.id.substring(2) : null; // If group - group id 
+      var image   = args.droptoken;
 
       var imageBase64 = await this.getBase64(pushoverTokenUseCloud ? image.cloudUrl : image.localUrl);
 
@@ -150,7 +151,7 @@ console.log("#Settings", pushoverTokenUseCloud);
           group: group,
           title: title,
           message: message,
-          ttl: pushoverTimeToLive,
+          ttl: ttl,
           attachment_base64: imageBase64,
           attachment_type: "image/jpeg",
         };
@@ -171,6 +172,7 @@ console.log("#Settings", pushoverTokenUseCloud);
       // Arrange 
       var title     = args.title;
       var message   = args.message;
+      var ttl       = args.ttl;
       var device    = args.device.id.startsWith("G#") ? null : args.device.id; // If group - device must be null
       var group     = args.device.id.startsWith("G#") ? args.device.id.substring(2) : null; // If group - group id 
       var url       = args.url;
@@ -182,7 +184,7 @@ console.log("#Settings", pushoverTokenUseCloud);
           group: group,
           title: title,
           message: message,
-          ttl: pushoverTimeToLive,          
+          ttl: ttl,          
           url: url,
           url_title: url_title
         };
@@ -203,6 +205,7 @@ console.log("#Settings", pushoverTokenUseCloud);
       // Arrange 
       var title     = args.title;
       var message   = args.message;
+      var ttl       = args.ttl;
       var device    = args.device.id.startsWith("G#") ? null : args.device.id; // If group - device must be null
       var group     = args.device.id.startsWith("G#") ? args.device.id.substring(2) : null; // If group - group id 
       var url       = args.url;
@@ -216,7 +219,7 @@ console.log("#Settings", pushoverTokenUseCloud);
           group: group,
           title: title,
           message: message,
-          ttl: pushoverTimeToLive,
+          ttl: ttl,
           url: url,
           url_title: url_title,
           attachment_base64: imageBase64,
@@ -239,6 +242,7 @@ console.log("#Settings", pushoverTokenUseCloud);
       // Arrange 
       var title   = args.title;
       var message = args.message;
+      var ttl     = args.ttl;
       var device  = args.device.id.startsWith("G#") ? null : args.device.id; // If group - device must be null
       var group   = args.device.id.startsWith("G#") ? args.device.id.substring(2) : null; // If group - group id 
       var image   = args.droptoken;
@@ -252,7 +256,7 @@ console.log("#Settings", pushoverTokenUseCloud);
           group: group,
           title: title,
           message: message,
-          ttl: pushoverTimeToLive,
+          ttl: ttl,
           priority: priority,
           sound: sound,
           retry: args.retry,
@@ -276,6 +280,7 @@ console.log("#Settings", pushoverTokenUseCloud);
       // Arrange 
       var title     = args.title;
       var message   = args.message;
+      var ttl       = args.ttl;
       var device    = args.device.id.startsWith("G#") ? null : args.device.id; // If group - device must be null
       var group     = args.device.id.startsWith("G#") ? args.device.id.substring(2) : null; // If group - group id 
       var url       = args.url;
@@ -291,7 +296,7 @@ console.log("#Settings", pushoverTokenUseCloud);
           group: group,
           title: title,
           message: message,
-          ttl: pushoverTimeToLive,
+          ttl: ttl,
           url: url,
           url_title: url_title,
           priority: priority,        

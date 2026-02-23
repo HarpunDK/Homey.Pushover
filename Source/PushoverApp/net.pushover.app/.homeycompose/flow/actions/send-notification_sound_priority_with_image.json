@@ -3,7 +3,7 @@
     "en": "Send notification with image and priority and sound"
   },
   "titleFormatted": {
-    "en": "Send notification with [[title]] and [[message]] and with [[droptoken]] to [[device]] with [[priority]] and [[sound]] (for emergency: [[retry]] and [[expire]])"
+    "en": "Send notification with [[title]] and [[message]] and with [[droptoken]] to [[device]] with [[priority]] and [[sound]] (for emergency: [[retry]] and [[expire]] with [[ttl]])"
   },
   "hint": {
     "en": "Send Pushover notification with image and priority and sound"
@@ -69,6 +69,15 @@
       "placeholder": {
         "en": "Only valid with emergency"
       }
+    },
+    {
+      "type": "number",
+      "name": "ttl",
+      "title": "TTL",
+      "placeholder": {
+        "en": "Time to Live (seconds)"
+      },
+      "required": false
     }
   ]
 }

@@ -58,5 +58,8 @@
   },
   "1.0.19": {
     "en": "Error handling around sounds collection. Support for TTL - user request."
+  },
+  "1.0.20": {
+    "en": "TTL moved to card."
   }
 }
