@@ -6,14 +6,14 @@
     "build": "tsc"
   },
   "devDependencies": {
-    "@tsconfig/node16": "^16.1.1",
-    "@types/homey": "npm:homey-apps-sdk-v3-types@^0.3.5",
-    "@types/node": "^20.9.0",
-    "typescript": "^5.2.2"
+    "@tsconfig/node16": "^16.1.9",
+    "@types/homey": "npm:homey-apps-sdk-v3-types@^0.3.12",
+    "@types/node": "^26.6.2",
+    "typescript": "^7.0.2"
   },
   "dependencies": {
-    "@types/underscore": "^1.11.14",
-    "axios": "^1.7.4",
-    "underscore": "^1.13.6"
+    "@types/underscore": "^1.13.0",
+    "axios": "^1.20.0",
+    "underscore": "^1.13.8"
   }
 }
